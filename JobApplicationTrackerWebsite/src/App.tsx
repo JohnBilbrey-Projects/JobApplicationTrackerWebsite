@@ -1,7 +1,7 @@
 import { useState } from "react";
 import ApplicationCard from "./components/ApplicationCard";
 import ApplicationForm from "./components/ApplicationForm";
-import { JobApplication, NewJobApplication } from "./types";
+import type { JobApplication, NewJobApplication } from "./types";
 
 const initialApplications: JobApplication[] = [
   {

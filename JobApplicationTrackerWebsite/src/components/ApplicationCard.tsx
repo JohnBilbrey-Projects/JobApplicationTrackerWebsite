@@ -1,4 +1,4 @@
-import { JobApplication } from "../types";
+import type { JobApplication } from "../types";
 
 type ApplicationCardProps = {
   application: JobApplication;

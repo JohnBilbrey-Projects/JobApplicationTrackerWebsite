@@ -21,6 +21,17 @@ function ApplicationForm({
   const [salary, setSalary] = useState("");
   const [notes, setNotes] = useState("");
 
+  function clearForm() {
+    setCompany("");
+    setPosition("");
+    setStatus("Rejected");
+    setLocation("");
+    setDateApplied("");
+    setJobUrl("");
+    setSalary("");
+    setNotes("");
+  }
+
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
@@ -54,14 +65,7 @@ function ApplicationForm({
       };
 
       onAddApplication(newApplication);
-      setCompany("");
-      setPosition("");
-      setStatus("Rejected");
-      setLocation("");
-      setDateApplied("");
-      setJobUrl("");
-      setSalary("");
-      setNotes("");
+      clearForm();
     }
   }
   useEffect(() => {
@@ -74,6 +78,8 @@ function ApplicationForm({
       setJobUrl(editingApplication.jobUrl);
       setSalary(editingApplication.salary);
       setNotes(editingApplication.notes);
+    } else {
+      clearForm();
     }
   }, [editingApplication]);
   return (
