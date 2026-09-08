@@ -32,6 +32,9 @@ function App() {
   const [applications, setApplications] =
     useState<JobApplication[]>(initialApplications);
 
+  const [editingApplication, setEditingApplication] =
+    useState<JobApplication | null>(null);
+
   function addApplication(application: NewJobApplication) {
     const newApplication: JobApplication = {
       id: Date.now(),
@@ -50,17 +53,34 @@ function App() {
     );
   }
 
+  function editApplication(updatedApplication: JobApplication) {
+    setApplications((prevApplications) =>
+      prevApplications.map((application) =>
+        application.id === updatedApplication.id
+          ? updatedApplication
+          : application,
+      ),
+    );
+
+    setEditingApplication(null);
+  }
+
   return (
     <>
       <h1>Job Application Tracker</h1>
 
-      <ApplicationForm onAddApplication={addApplication} />
+      <ApplicationForm
+        onAddApplication={addApplication}
+        onEditApplication={editApplication}
+        editingApplication={editingApplication}
+      />
 
       {applications.map((application) => (
         <ApplicationCard
           key={application.id}
           application={application}
           onDelete={deleteApplication}
+          onEdit={setEditingApplication}
         />
       ))}
     </>

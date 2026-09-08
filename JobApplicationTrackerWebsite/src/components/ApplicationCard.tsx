@@ -3,9 +3,14 @@ import { JobApplication } from "../types";
 type ApplicationCardProps = {
   application: JobApplication;
   onDelete: (id: number) => void;
+  onEdit: (application: JobApplication) => void;
 };
 
-function ApplicationCard({ application, onDelete }: ApplicationCardProps) {
+function ApplicationCard({
+  application,
+  onDelete,
+  onEdit,
+}: ApplicationCardProps) {
   return (
     <>
       <h2>{application.company}</h2>
@@ -20,6 +25,7 @@ function ApplicationCard({ application, onDelete }: ApplicationCardProps) {
       </a>
       <br />
       <button onClick={() => onDelete(application.id)}>Delete</button>
+      <button onClick={() => onEdit(application)}>Edit</button>
     </>
   );
 }

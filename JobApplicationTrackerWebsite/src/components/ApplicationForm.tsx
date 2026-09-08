@@ -1,11 +1,17 @@
-import { useState } from "react";
-import { ApplicationStatus, NewJobApplication } from "../types";
+import { useEffect, useState } from "react";
+import { ApplicationStatus, JobApplication, NewJobApplication } from "../types";
 
 type ApplicationFormProps = {
   onAddApplication: (application: NewJobApplication) => void;
+  onEditApplication: (application: JobApplication) => void;
+  editingApplication: JobApplication | null;
 };
 
-function ApplicationForm({ onAddApplication }: ApplicationFormProps) {
+function ApplicationForm({
+  onAddApplication,
+  onEditApplication,
+  editingApplication,
+}: ApplicationFormProps) {
   const [company, setCompany] = useState("");
   const [position, setPosition] = useState("");
   const [status, setStatus] = useState<ApplicationStatus>("Rejected");
@@ -21,27 +27,55 @@ function ApplicationForm({ onAddApplication }: ApplicationFormProps) {
     if (company.trim() === "" || position.trim() === "") {
       return;
     }
-    const newApplication: NewJobApplication = {
-      company,
-      position,
-      status,
-      location,
-      dateApplied,
-      jobUrl,
-      salary,
-      notes,
-    };
 
-    onAddApplication(newApplication);
-    setCompany("");
-    setPosition("");
-    setStatus("Rejected");
-    setLocation("");
-    setDateApplied("");
-    setJobUrl("");
-    setSalary("");
-    setNotes("");
+    if (editingApplication) {
+      const updatedApplication: JobApplication = {
+        id: editingApplication.id,
+        company,
+        position,
+        status,
+        location,
+        dateApplied,
+        jobUrl,
+        salary,
+        notes,
+      };
+      onEditApplication(updatedApplication);
+    } else {
+      const newApplication: NewJobApplication = {
+        company,
+        position,
+        status,
+        location,
+        dateApplied,
+        jobUrl,
+        salary,
+        notes,
+      };
+
+      onAddApplication(newApplication);
+      setCompany("");
+      setPosition("");
+      setStatus("Rejected");
+      setLocation("");
+      setDateApplied("");
+      setJobUrl("");
+      setSalary("");
+      setNotes("");
+    }
   }
+  useEffect(() => {
+    if (editingApplication) {
+      setCompany(editingApplication.company);
+      setPosition(editingApplication.position);
+      setStatus(editingApplication.status);
+      setLocation(editingApplication.location);
+      setDateApplied(editingApplication.dateApplied);
+      setJobUrl(editingApplication.jobUrl);
+      setSalary(editingApplication.salary);
+      setNotes(editingApplication.notes);
+    }
+  }, [editingApplication]);
   return (
     <form onSubmit={handleSubmit}>
       <div>
@@ -122,7 +156,9 @@ function ApplicationForm({ onAddApplication }: ApplicationFormProps) {
         />
       </div>
 
-      <button type="submit">Add Application</button>
+      <button type="submit">
+        {editingApplication ? "Save Changes" : "Add Application"}
+      </button>
     </form>
   );
 }
