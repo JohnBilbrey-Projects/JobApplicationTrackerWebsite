@@ -2,9 +2,10 @@ import { JobApplication } from "../types";
 
 type ApplicationCardProps = {
   application: JobApplication;
+  onDelete: (id: number) => void;
 };
 
-function ApplicationCard({ application }: ApplicationCardProps) {
+function ApplicationCard({ application, onDelete }: ApplicationCardProps) {
   return (
     <>
       <h2>{application.company}</h2>
@@ -17,6 +18,8 @@ function ApplicationCard({ application }: ApplicationCardProps) {
       <a href={application.jobUrl} target="_blank" rel="noopener noreferrer">
         {application.jobUrl}
       </a>
+      <br />
+      <button onClick={() => onDelete(application.id)}>Delete</button>
     </>
   );
 }

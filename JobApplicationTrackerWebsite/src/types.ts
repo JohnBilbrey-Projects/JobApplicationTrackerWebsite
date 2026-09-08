@@ -16,3 +16,5 @@ export type JobApplication = {
   salary: string,
   notes: string
 };
+
+export type NewJobApplication = Omit<JobApplication, "id">;

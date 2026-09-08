@@ -44,6 +44,12 @@ function App() {
     ]);
   }
 
+  function deleteApplication(id: number) {
+    setApplications((prevApplications) =>
+      prevApplications.filter((application) => application.id !== id),
+    );
+  }
+
   return (
     <>
       <h1>Job Application Tracker</h1>
@@ -51,7 +57,11 @@ function App() {
       <ApplicationForm onAddApplication={addApplication} />
 
       {applications.map((application) => (
-        <ApplicationCard key={application.id} application={application} />
+        <ApplicationCard
+          key={application.id}
+          application={application}
+          onDelete={deleteApplication}
+        />
       ))}
     </>
   );
