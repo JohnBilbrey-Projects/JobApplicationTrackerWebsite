@@ -5,12 +5,14 @@ type ApplicationFormProps = {
   onAddApplication: (application: NewJobApplication) => void;
   onEditApplication: (application: JobApplication) => void;
   editingApplication: JobApplication | null;
+  onCancelEdit: () => void;
 };
 
 function ApplicationForm({
   onAddApplication,
   onEditApplication,
   editingApplication,
+  onCancelEdit,
 }: ApplicationFormProps) {
   const [company, setCompany] = useState("");
   const [position, setPosition] = useState("");
@@ -165,6 +167,12 @@ function ApplicationForm({
       <button type="submit">
         {editingApplication ? "Save Changes" : "Add Application"}
       </button>
+
+      {editingApplication && (
+        <button type="button" onClick={onCancelEdit}>
+          Cancel Edit
+        </button>
+      )}
     </form>
   );
 }

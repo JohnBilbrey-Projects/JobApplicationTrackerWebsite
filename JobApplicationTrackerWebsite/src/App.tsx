@@ -10,7 +10,7 @@ const initialApplications: JobApplication[] = [
     position: "software engineer",
     status: "Rejected",
     location: "Remote",
-    dateApplied: "9/8/2026",
+    dateApplied: "2026-09-09",
     jobUrl: "https://microsoft.com",
     salary: "$70,000",
     notes: "none",
@@ -21,7 +21,7 @@ const initialApplications: JobApplication[] = [
     position: "software engineer",
     status: "Rejected",
     location: "remote",
-    dateApplied: "9/8/2026",
+    dateApplied: "2026-09-09",
     jobUrl: "https://google.com",
     salary: "$85,000",
     notes: "none",
@@ -51,6 +51,10 @@ function App() {
     setApplications((prevApplications) =>
       prevApplications.filter((application) => application.id !== id),
     );
+
+    if (editingApplication?.id === id) {
+      setEditingApplication(null);
+    }
   }
 
   function editApplication(updatedApplication: JobApplication) {
@@ -65,6 +69,10 @@ function App() {
     setEditingApplication(null);
   }
 
+  function cancelEdit() {
+    setEditingApplication(null);
+  }
+
   return (
     <>
       <h1>Job Application Tracker</h1>
@@ -73,6 +81,7 @@ function App() {
         onAddApplication={addApplication}
         onEditApplication={editApplication}
         editingApplication={editingApplication}
+        onCancelEdit={cancelEdit}
       />
 
       {applications.map((application) => (
