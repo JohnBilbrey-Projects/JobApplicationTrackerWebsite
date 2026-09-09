@@ -3,31 +3,6 @@ import ApplicationCard from "./components/ApplicationCard";
 import ApplicationForm from "./components/ApplicationForm";
 import type { JobApplication, NewJobApplication } from "./types";
 
-const initialApplications: JobApplication[] = [
-  {
-    id: 1,
-    company: "Microsoft",
-    position: "software engineer",
-    status: "Rejected",
-    location: "Remote",
-    dateApplied: "2026-09-09",
-    jobUrl: "https://microsoft.com",
-    salary: "$70,000",
-    notes: "none",
-  },
-  {
-    id: 2,
-    company: "Google",
-    position: "software engineer",
-    status: "Rejected",
-    location: "remote",
-    dateApplied: "2026-09-09",
-    jobUrl: "https://google.com",
-    salary: "$85,000",
-    notes: "none",
-  },
-];
-
 function App() {
   const [applications, setApplications] = useState<JobApplication[]>([]);
 
