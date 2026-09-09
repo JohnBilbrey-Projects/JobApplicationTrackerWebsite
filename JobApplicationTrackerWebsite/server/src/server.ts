@@ -2,6 +2,8 @@ import express from "express";
 
 const app = express();
 
+app.use(express.json());
+
 const PORT = 3000;
 
 const applications = [
@@ -36,6 +38,16 @@ app.get("/", (req, res) => {
 app.get("/api/applications", (req, res) => {
     res.json(applications);
 })
+
+app.post("/api/applications", (req, res) => {
+    const newApplication = {
+        id: Date.now(),
+        ...req.body,
+    };
+    applications.unshift(newApplication);
+
+    res.status(201).json(newApplication);
+});
 
 app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);

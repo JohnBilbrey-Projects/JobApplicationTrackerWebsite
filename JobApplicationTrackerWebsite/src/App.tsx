@@ -45,16 +45,29 @@ function App() {
     fetchApplications();
   }, []);
 
-  function addApplication(application: NewJobApplication) {
-    const newApplication: JobApplication = {
-      id: Date.now(),
-      ...application,
-    };
+  async function addApplication(application: NewJobApplication) {
+    try {
+      const response = await fetch("/api/applications", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(application),
+      });
 
-    setApplications((prevApplications) => [
-      newApplication,
-      ...prevApplications,
-    ]);
+      if (!response.ok) {
+        throw new Error("Failed to add application");
+      }
+
+      const newApplication: JobApplication = await response.json();
+
+      setApplications((prevApplications) => [
+        newApplication,
+        ...prevApplications,
+      ]);
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   function deleteApplication(id: number) {
