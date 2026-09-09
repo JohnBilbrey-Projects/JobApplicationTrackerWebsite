@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ApplicationCard from "./components/ApplicationCard";
 import ApplicationForm from "./components/ApplicationForm";
 import type { JobApplication, NewJobApplication } from "./types";
@@ -29,11 +29,21 @@ const initialApplications: JobApplication[] = [
 ];
 
 function App() {
-  const [applications, setApplications] =
-    useState<JobApplication[]>(initialApplications);
+  const [applications, setApplications] = useState<JobApplication[]>([]);
 
   const [editingApplication, setEditingApplication] =
     useState<JobApplication | null>(null);
+
+  useEffect(() => {
+    async function fetchApplications() {
+      const response = await fetch("/api/applications");
+      const data: JobApplication[] = await response.json();
+
+      setApplications(data);
+    }
+
+    fetchApplications();
+  }, []);
 
   function addApplication(application: NewJobApplication) {
     const newApplication: JobApplication = {
