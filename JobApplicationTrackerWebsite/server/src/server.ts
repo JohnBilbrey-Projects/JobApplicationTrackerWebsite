@@ -1,4 +1,5 @@
 import express from "express";
+import prisma from "./prisma";
 
 const app = express();
 
@@ -6,87 +7,100 @@ app.use(express.json());
 
 const PORT = 3000;
 
-const applications = [
-  {
-    id: 1,
-    company: "Microsoft",
-    position: "Software Engineer",
-    status: "Rejected",
-    location: "Remote",
-    dateApplied: "2026-09-09",
-    jobUrl: "https://microsoft.com",
-    salary: "$70,000",
-    notes: "none",
-  },
-  {
-    id: 2,
-    company: "Google",
-    position: "Software Engineer",
-    status: "Rejected",
-    location: "Remote",
-    dateApplied: "2026-09-09",
-    jobUrl: "https://google.com",
-    salary: "$85,000",
-    notes: "none",
-  },
-];
 
-app.get("/", (req, res) => {
+
+app.get("/", async (req, res) => {
     res.send("API is running...");
 });
 
-app.get("/api/applications", (req, res) => {
-    res.json(applications);
-})
+app.get("/api/applications", async (req, res) => {
+    try {
+        const applications = await prisma.jobApplication.findMany();
 
-app.post("/api/applications", (req, res) => {
-    const newApplication = {
-        id: Date.now(),
-        ...req.body,
-    };
-    applications.unshift(newApplication);
+        res.json(applications);
+    } catch (error){
+        console.error(error);
 
-    res.status(201).json(newApplication);
-});
-
-app.delete("/api/applications/:id", (req, res) => {
-    const id = Number(req.params.id);
-
-    const applicationIndex = applications.findIndex(
-        (application) => application.id === id
-    );
-
-    if (applicationIndex === -1){
-        return res.status(404).json({message: "Application not found."});
-    }
-
-    applications.splice(applicationIndex, 1);
-
-    res.status(204).send();
-})
-
-app.put("/api/applications/:id", (req, res) => {
-    const id = Number(req.params.id);
-
-    const applicationIndex = applications.findIndex(
-        (application) => application.id === id
-    );
-
-    if (applicationIndex === -1){
-        return res.status(404).json({
-            message: "Application not found."
+        res.status(500).json({
+            message: "Failed to fetch applications",
         });
     }
-
-    const updatedApplication = {
-        id,
-        ...req.body,
-    };
-
-    applications[applicationIndex] = updatedApplication;
-
-    res.json(updatedApplication);
 })
+
+app.post("/api/applications", async (req, res) => {
+    try {
+        const newApplication = await prisma.jobApplication.create({
+            data: {
+                company: req.body.company,
+                position: req.body.position,
+                status: req.body.status,
+                location: req.body.location,
+                dateApplied: req.body.dateApplied,
+                jobUrl: req.body.jobUrl,
+                salary: req.body.salary,
+                notes: req.body.notes,
+            },
+        });
+
+        res.status(201).json(newApplication);
+    } catch (error){
+        console.error(error);
+
+        res.status(500).json({
+            message: "Failed to create application.",
+        });
+    }
+});
+
+app.delete("/api/applications/:id", async (req, res) => {
+    try {
+        const id = Number(req.params.id);
+
+        await prisma.jobApplication.delete({
+            where: {
+                id,
+            },
+        });
+
+        res.status(204).send();
+    } catch (error) {
+        console.error(error);
+
+        res.status(500).json({
+            message: "Failed to delete application.",
+        });
+    }
+});
+
+app.put("/api/applications/:id", async (req, res) => {
+    try{
+        const id = Number(req.params.id);
+
+        const updatedApplication = await prisma.jobApplication.update({
+            where: {
+                id,
+            },
+            data: {
+                company: req.body.company,
+                position: req.body.position,
+                status: req.body.status,
+                location: req.body.location,
+                dateApplied: req.body.dateApplied,
+                jobUrl: req.body.jobUrl,
+                salary: req.body.salary,
+                notes: req.body.notes,
+            },
+        });
+
+        res.json(updatedApplication);
+    } catch (error) {
+        console.error(error);
+
+        res.status(500).json({
+            message: "Failed to update application",
+        });
+    }
+});
 
 app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
