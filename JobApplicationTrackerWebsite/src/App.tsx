@@ -51,6 +51,10 @@ function App() {
         method: "DELETE",
       });
 
+      if (!response.ok) {
+        throw new Error("Failed to delete application.");
+      }
+
       setApplications((prevApplications) =>
         prevApplications.filter((application) => application.id !== id),
       );
@@ -63,16 +67,37 @@ function App() {
     }
   }
 
-  function editApplication(updatedApplication: JobApplication) {
-    setApplications((prevApplications) =>
-      prevApplications.map((application) =>
-        application.id === updatedApplication.id
-          ? updatedApplication
-          : application,
-      ),
-    );
+  async function editApplication(updatedApplication: JobApplication) {
+    try {
+      const response = await fetch(
+        `api/applications/${updatedApplication.id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(updatedApplication),
+        },
+      );
 
-    setEditingApplication(null);
+      if (!response.ok) {
+        throw new Error("Failed to update application.");
+      }
+
+      const savedApplication: JobApplication = await response.json();
+
+      setApplications((prevApplications) =>
+        prevApplications.map((application) =>
+          application.id === savedApplication.id
+            ? savedApplication
+            : application,
+        ),
+      );
+
+      setEditingApplication(null);
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   function cancelEdit() {

@@ -57,12 +57,35 @@ app.delete("/api/applications/:id", (req, res) => {
     );
 
     if (applicationIndex === -1){
-        return res.status(404).json({message: "Application not found"});
+        return res.status(404).json({message: "Application not found."});
     }
 
     applications.splice(applicationIndex, 1);
 
     res.status(204).send();
+})
+
+app.put("/api/applications/:id", (req, res) => {
+    const id = Number(req.params.id);
+
+    const applicationIndex = applications.findIndex(
+        (application) => application.id === id
+    );
+
+    if (applicationIndex === -1){
+        return res.status(404).json({
+            message: "Application not found."
+        });
+    }
+
+    const updatedApplication = {
+        id,
+        ...req.body,
+    };
+
+    applications[applicationIndex] = updatedApplication;
+
+    res.json(updatedApplication);
 })
 
 app.listen(PORT, () => {
