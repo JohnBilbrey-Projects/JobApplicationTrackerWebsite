@@ -3,7 +3,9 @@ export type ApplicationStatus =
   | "Applied"
   | "Interview"
   | "Rejected"
-  | "Evaluation";
+  | "Evaluation"
+  | "No Response";
+
 
 export type JobApplication = {
   id: number;

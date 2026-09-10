@@ -16,7 +16,7 @@ function ApplicationForm({
 }: ApplicationFormProps) {
   const [company, setCompany] = useState("");
   const [position, setPosition] = useState("");
-  const [status, setStatus] = useState<ApplicationStatus>("Rejected");
+  const [status, setStatus] = useState<ApplicationStatus>("No Response");
   const [location, setLocation] = useState("");
   const [dateApplied, setDateApplied] = useState("");
   const [jobUrl, setJobUrl] = useState("");
@@ -26,7 +26,7 @@ function ApplicationForm({
   function clearForm() {
     setCompany("");
     setPosition("");
-    setStatus("Rejected");
+    setStatus("No Response");
     setLocation("");
     setDateApplied("");
     setJobUrl("");
@@ -114,9 +114,10 @@ function ApplicationForm({
         >
           <option value="Interested">Interested</option>
           <option value="Applied">Applied</option>
-          <option value="Interview">Interview</option>
-          <option value="Rejected">Rejected</option>
           <option value="Evaluation">Evaluation</option>
+          <option value="Interview">Interview</option>
+          <option value="No Response">No Response</option>
+          <option value="Rejected">Rejected</option>
         </select>
       </div>
 
