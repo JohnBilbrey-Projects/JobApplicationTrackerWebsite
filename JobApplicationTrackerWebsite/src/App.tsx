@@ -45,13 +45,21 @@ function App() {
     }
   }
 
-  function deleteApplication(id: number) {
-    setApplications((prevApplications) =>
-      prevApplications.filter((application) => application.id !== id),
-    );
+  async function deleteApplication(id: number) {
+    try {
+      const response = await fetch(`/api/applications/${id}`, {
+        method: "DELETE",
+      });
 
-    if (editingApplication?.id === id) {
-      setEditingApplication(null);
+      setApplications((prevApplications) =>
+        prevApplications.filter((application) => application.id !== id),
+      );
+
+      if (editingApplication?.id === id) {
+        setEditingApplication(null);
+      }
+    } catch (error) {
+      console.error(error);
     }
   }
 

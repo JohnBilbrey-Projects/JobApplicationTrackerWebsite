@@ -49,6 +49,22 @@ app.post("/api/applications", (req, res) => {
     res.status(201).json(newApplication);
 });
 
+app.delete("/api/applications/:id", (req, res) => {
+    const id = Number(req.params.id);
+
+    const applicationIndex = applications.findIndex(
+        (application) => application.id === id
+    );
+
+    if (applicationIndex === -1){
+        return res.status(404).json({message: "Application not found"});
+    }
+
+    applications.splice(applicationIndex, 1);
+
+    res.status(204).send();
+})
+
 app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
 });
