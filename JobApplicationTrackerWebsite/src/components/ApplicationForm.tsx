@@ -85,7 +85,7 @@ function ApplicationForm({
     }
   }, [editingApplication]);
   return (
-    <form onSubmit={handleSubmit}>
+    <form className="application-form" onSubmit={handleSubmit}>
       <div>
         <label>Company: </label>
         <input

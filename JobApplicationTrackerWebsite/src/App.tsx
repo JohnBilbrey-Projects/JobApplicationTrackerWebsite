@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import ApplicationCard from "./components/ApplicationCard";
+import ApplicationTable from "./components/ApplicationTable";
 import ApplicationForm from "./components/ApplicationForm";
 import type { JobApplication, NewJobApplication } from "./types";
 
@@ -105,25 +105,30 @@ function App() {
   }
 
   return (
-    <>
-      <h1>Job Application Tracker</h1>
+    <div className="App">
+      <div className="container">
+        <header className="page-header">
+          <h1>Job Application Tracker</h1>
+        </header>
 
-      <ApplicationForm
-        onAddApplication={addApplication}
-        onEditApplication={editApplication}
-        editingApplication={editingApplication}
-        onCancelEdit={cancelEdit}
-      />
+        <section className="form-section">
+          <ApplicationForm
+            onAddApplication={addApplication}
+            onEditApplication={editApplication}
+            editingApplication={editingApplication}
+            onCancelEdit={cancelEdit}
+          />
+        </section>
 
-      {applications.map((application) => (
-        <ApplicationCard
-          key={application.id}
-          application={application}
-          onDelete={deleteApplication}
-          onEdit={setEditingApplication}
-        />
-      ))}
-    </>
+        <section className="table-section">
+          <ApplicationTable
+            applications={applications}
+            onDelete={deleteApplication}
+            onEdit={setEditingApplication}
+          />
+        </section>
+      </div>
+    </div>
   );
 }
 
