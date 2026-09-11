@@ -5,9 +5,9 @@ import type { JobApplication, NewJobApplication } from "./types";
 
 function App() {
   const [applications, setApplications] = useState<JobApplication[]>([]);
-
   const [editingApplication, setEditingApplication] =
     useState<JobApplication | null>(null);
+  const [isFormOpen, setIsFormOpen] = useState(false);
 
   useEffect(() => {
     async function fetchApplications() {
@@ -19,6 +19,38 @@ function App() {
 
     fetchApplications();
   }, []);
+
+  useEffect(() => {
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        setEditingApplication(null);
+        setIsFormOpen(false);
+      }
+    }
+
+    if (isFormOpen) {
+      window.addEventListener("keydown", handleKeyDown);
+    }
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isFormOpen]);
+
+  function openAddForm() {
+    setEditingApplication(null);
+    setIsFormOpen(true);
+  }
+
+  function openEditForm(application: JobApplication) {
+    setEditingApplication(application);
+    setIsFormOpen(true);
+  }
+
+  function closeForm() {
+    setEditingApplication(null);
+    setIsFormOpen(false);
+  }
 
   async function addApplication(application: NewJobApplication) {
     try {
@@ -40,6 +72,8 @@ function App() {
         newApplication,
         ...prevApplications,
       ]);
+      setIsFormOpen(false);
+      setEditingApplication(null);
     } catch (error) {
       console.error(error);
     }
@@ -95,13 +129,10 @@ function App() {
       );
 
       setEditingApplication(null);
+      setIsFormOpen(false);
     } catch (error) {
       console.error(error);
     }
-  }
-
-  function cancelEdit() {
-    setEditingApplication(null);
   }
 
   return (
@@ -111,22 +142,39 @@ function App() {
           <h1>Job Application Tracker</h1>
         </header>
 
-        <section className="form-section">
-          <ApplicationForm
-            onAddApplication={addApplication}
-            onEditApplication={editApplication}
-            editingApplication={editingApplication}
-            onCancelEdit={cancelEdit}
-          />
-        </section>
-
         <section className="table-section">
+          <div className="table-header">
+            <h2>Applications</h2>
+            <button className="add-button" onClick={openAddForm}>
+              Add +
+            </button>
+          </div>
           <ApplicationTable
             applications={applications}
             onDelete={deleteApplication}
-            onEdit={setEditingApplication}
+            onEdit={openEditForm}
           />
         </section>
+
+        {isFormOpen && (
+          <div className="modal-overlay" onClick={closeForm}>
+            <div className="modal" onClick={(event) => event.stopPropagation()}>
+              <button
+                className="modal-close-button"
+                onClick={closeForm}
+                type="button"
+              >
+                x
+              </button>
+              <ApplicationForm
+                onAddApplication={addApplication}
+                onEditApplication={editApplication}
+                editingApplication={editingApplication}
+                onCancelEdit={closeForm}
+              />
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
