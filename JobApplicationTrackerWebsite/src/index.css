@@ -278,3 +278,27 @@ textarea {
   color: #111827;
   text-align: center;
 }
+
+.table-toolbar {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.table-toolbar input,
+.table-toolbar select {
+  padding: 10px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: white;
+}
+
+.table-toolbar input {
+  flex: 1;
+  min-width: 240px;
+}
+
+.table-toolbar select {
+  min-width: 160px;;
+}

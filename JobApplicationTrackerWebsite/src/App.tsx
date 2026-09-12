@@ -8,6 +8,9 @@ function App() {
   const [editingApplication, setEditingApplication] =
     useState<JobApplication | null>(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState("All");
+  const [sortOption, setSortOption] = useState("newest");
 
   useEffect(() => {
     async function fetchApplications() {
@@ -149,6 +152,51 @@ function App() {
     }
   }
 
+  const displayedApplications = applications
+    .filter((application) => {
+      const matchesSearch =
+        application.company.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        application.position.toLowerCase().includes(searchTerm.toLowerCase());
+
+      const matchesStatus =
+        statusFilter === "All" || application.status === statusFilter;
+
+      return matchesSearch && matchesStatus;
+    })
+    .sort((a, b) => {
+      if (sortOption === "newest") {
+        if (a.status === "Interested" && b.status !== "Interested") {
+          return -1;
+        }
+        if (a.status !== "Interested" && b.status === "Interested") {
+          return 1;
+        }
+
+        return b.dateApplied.localeCompare(a.dateApplied);
+      }
+
+      if (sortOption === "oldest") {
+        if (a.status === "Interested" && b.status !== "Interested") {
+          return 1;
+        }
+        if (a.status !== "Interested" && b.status === "Interested") {
+          return -1;
+        }
+
+        return a.dateApplied.localeCompare(b.dateApplied);
+      }
+
+      if (sortOption === "company-az") {
+        return a.company.localeCompare(b.company);
+      }
+
+      if (sortOption === "company-za") {
+        return b.company.localeCompare(a.company);
+      }
+
+      return 0;
+    });
+
   return (
     <div className="App">
       <div className="container">
@@ -185,8 +233,40 @@ function App() {
               Add +
             </button>
           </div>
+          <div className="table-toolbar">
+            <input
+              type="text"
+              placeholder="Search company or position..."
+              value={searchTerm}
+              onChange={(event) => setSearchTerm(event.target.value)}
+            />
+
+            <select
+              value={statusFilter}
+              onChange={(event) => setStatusFilter(event.target.value)}
+            >
+              <option value="All">All Statuses</option>
+              <option value="Interested">Interested</option>
+              <option value="Applied">Applied</option>
+              <option value="No Response">No Response</option>
+              <option value="Interview">Interview</option>
+              <option value="Evaluation">Evaluation</option>
+              <option value="Rejected">Rejected</option>
+            </select>
+
+            <select
+              value={sortOption}
+              onChange={(event) => setSortOption(event.target.value)}
+            >
+              <option value="newest">Newest First</option>
+              <option value="oldest">Oldest First</option>
+              <option value="company-az">Company A-Z</option>
+              <option value="company-za">Company Z-A</option>
+            </select>
+          </div>
+
           <ApplicationTable
-            applications={applications}
+            applications={displayedApplications}
             onDelete={deleteApplication}
             onEdit={openEditForm}
           />
