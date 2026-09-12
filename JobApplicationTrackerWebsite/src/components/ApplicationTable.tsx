@@ -1,5 +1,6 @@
 import type { JobApplication } from "../types";
 
+//Data and action handlers supplied by the parent App component
 type ApplicationTableProps = {
   applications: JobApplication[];
   onDelete: (id: number) => void;
@@ -28,11 +29,13 @@ function ApplicationTable({
       </thead>
 
       <tbody>
+        {/*Render one table row for each application supplied by App.tsx */}
         {applications.map((application) => (
           <tr key={application.id}>
             <td>{application.company}</td>
             <td>{application.position}</td>
             <td>
+              {/*Convert statuses into CSS firendly class names*/}
               <span
                 className={`status-badge status-${application.status.toLowerCase().replaceAll(" ", "-")}`}
               >
@@ -41,12 +44,15 @@ function ApplicationTable({
             </td>
             <td>{application.jobUrl}</td>
             <td>{application.location}</td>
+            {/*show "N/A" for applications w no date applied */}
             <td>{application.dateApplied || "N/A"}</td>
             <td>{application.salary}</td>
+            {/*styling truncates long notes so they dont expand the table too much */}
             <td className="notes-cell">{application.notes}</td>
             <td>
+              {/*pass selected entry back to App.tsx so it can open it edit mode */}
               <button onClick={() => onEdit(application)}>Edit</button>
-
+              {/*Only ID is needed to identify record to delete */}
               <button onClick={() => onDelete(application.id)}>Delete</button>
             </td>
           </tr>

@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { ApplicationStatus, JobApplication, NewJobApplication } from "../types";
 
+//functions and data passed down from App.tsx
+//same form is reused for both creating and editing applications
 type ApplicationFormProps = {
   onAddApplication: (application: NewJobApplication) => void;
   onEditApplication: (application: JobApplication) => void;
@@ -14,6 +16,7 @@ function ApplicationForm({
   editingApplication,
   onCancelEdit,
 }: ApplicationFormProps) {
+  //each form field is controlled through local component state
   const [company, setCompany] = useState("");
   const [position, setPosition] = useState("");
   const [status, setStatus] = useState<ApplicationStatus>("No Response");
@@ -23,6 +26,7 @@ function ApplicationForm({
   const [salary, setSalary] = useState("");
   const [notes, setNotes] = useState("");
 
+  //reset all fields back to their defaults when starting a new application
   function clearForm() {
     setCompany("");
     setPosition("");
@@ -34,6 +38,8 @@ function ApplicationForm({
     setNotes("");
   }
 
+  //applications w status "Interested" have not been submitted, so
+  //they should not have a submission date applied
   function handleStatusChange(newStatus: ApplicationStatus) {
     setStatus(newStatus);
 
@@ -43,13 +49,16 @@ function ApplicationForm({
   }
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    //prevent the browser's default form submission and page refresh
     event.preventDefault();
 
+    //company and position are required before an application can be submitted
     if (company.trim() === "" || position.trim() === "") {
       return;
     }
 
     if (editingApplication) {
+      //preserve existing database ID when updating an application
       const updatedApplication: JobApplication = {
         id: editingApplication.id,
         company,
@@ -63,6 +72,7 @@ function ApplicationForm({
       };
       onEditApplication(updatedApplication);
     } else {
+      //new applications do not include an ID because the database creates it
       const newApplication: NewJobApplication = {
         company,
         position,
@@ -78,6 +88,10 @@ function ApplicationForm({
       clearForm();
     }
   }
+
+  //whenever the application being edited changes, populate the form with that
+  //application's existing values. If no application is being edited, reset the
+  //form for adding a new one
   useEffect(() => {
     if (editingApplication) {
       setCompany(editingApplication.company);
@@ -144,9 +158,7 @@ function ApplicationForm({
         <input
           type="date"
           value={dateApplied}
-          onChange={(event) =>
-            setDateApplied(event.target.value as ApplicationStatus)
-          }
+          onChange={(event) => setDateApplied(event.target.value)}
           disabled={status === "Interested"}
           required={status !== "Interested"}
         />
@@ -182,6 +194,7 @@ function ApplicationForm({
         {editingApplication ? "Save Changes" : "Add Application"}
       </button>
 
+      {/*Cancel is only needed while editing an existing application*/}
       {editingApplication && (
         <button type="button" onClick={onCancelEdit}>
           Cancel Edit

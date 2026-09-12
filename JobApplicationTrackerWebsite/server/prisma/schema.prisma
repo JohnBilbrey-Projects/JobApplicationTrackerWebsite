@@ -1,24 +1,26 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
+//configure Prisma's generated client used by the Node/TypeScript backend
 generator client {
   provider = "prisma-client"
   output   = "../generated/prisma"
+
+  //generate CommonJS compatible code to match backend build configuration
   moduleFormat = "cjs"
 }
 
+//define PostgreSQL as the database used by the application
 datasource db {
   provider = "postgresql"
 }
 
+//database model representing a single job application
 model JobApplication {
   id          Int    @id @default(autoincrement())
   company     String
   position    String
   status      String
   location    String
+
+  //stored as strings because the frontend currently handles these values directly
   dateApplied String
   jobUrl      String
   salary      String
