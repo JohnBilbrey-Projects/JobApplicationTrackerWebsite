@@ -37,6 +37,20 @@ function App() {
     };
   }, [isFormOpen]);
 
+  const totalApplications = applications.length;
+
+  const submittedApplications = applications.filter(
+    (application) => application.status !== "Interested",
+  ).length;
+
+  const interviewApplications = applications.filter(
+    (application) => application.status === "Interview",
+  ).length;
+
+  const noResponseApplications = applications.filter(
+    (application) => application.status === "No Response",
+  ).length;
+
   function openAddForm() {
     setEditingApplication(null);
     setIsFormOpen(true);
@@ -141,6 +155,28 @@ function App() {
         <header className="page-header">
           <h1>Job Application Tracker</h1>
         </header>
+
+        <section className="dashboard">
+          <div className="stat-card">
+            <span className="stat-label">Total Applications</span>
+            <span className="stat-value">{totalApplications}</span>
+          </div>
+
+          <div className="stat-card">
+            <span className="stat-label">Applied</span>
+            <span className="stat-value">{submittedApplications}</span>
+          </div>
+
+          <div className="stat-card">
+            <span className="stat-label">Interviews</span>
+            <span className="stat-value">{interviewApplications}</span>
+          </div>
+
+          <div className="stat-card">
+            <span className="stat-label">No Response</span>
+            <span className="stat-value">{noResponseApplications}</span>
+          </div>
+        </section>
 
         <section className="table-section">
           <div className="table-header">

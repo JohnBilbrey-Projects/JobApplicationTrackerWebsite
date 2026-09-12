@@ -34,6 +34,14 @@ function ApplicationForm({
     setNotes("");
   }
 
+  function handleStatusChange(newStatus: ApplicationStatus) {
+    setStatus(newStatus);
+
+    if (newStatus === "Interested") {
+      setDateApplied("");
+    }
+  }
+
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
@@ -84,6 +92,7 @@ function ApplicationForm({
       clearForm();
     }
   }, [editingApplication]);
+
   return (
     <form className="application-form" onSubmit={handleSubmit}>
       <div>
@@ -109,7 +118,7 @@ function ApplicationForm({
         <select
           value={status}
           onChange={(event) =>
-            setStatus(event.target.value as ApplicationStatus)
+            handleStatusChange(event.target.value as ApplicationStatus)
           }
         >
           <option value="Interested">Interested</option>
@@ -135,7 +144,11 @@ function ApplicationForm({
         <input
           type="date"
           value={dateApplied}
-          onChange={(event) => setDateApplied(event.target.value)}
+          onChange={(event) =>
+            setDateApplied(event.target.value as ApplicationStatus)
+          }
+          disabled={status === "Interested"}
+          required={status !== "Interested"}
         />
       </div>
 

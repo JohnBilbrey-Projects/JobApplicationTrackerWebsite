@@ -27,6 +27,9 @@ export function validateApplication(data: any): string | null {
     if (typeof data.dateApplied !== "string"){
         return "Date applied must be a string.";
     }
+    if (data.status !== "Interested" && data.dateApplied.trim() === ""){
+        return "Date applied is required for submitted applications.";
+    }
 
     if (typeof data.jobUrl !== "string"){
         return "Job URL must be a string.";

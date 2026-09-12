@@ -41,7 +41,7 @@ function ApplicationTable({
             </td>
             <td>{application.jobUrl}</td>
             <td>{application.location}</td>
-            <td>{application.dateApplied}</td>
+            <td>{application.dateApplied || "N/A"}</td>
             <td>{application.salary}</td>
             <td className="notes-cell">{application.notes}</td>
             <td>
