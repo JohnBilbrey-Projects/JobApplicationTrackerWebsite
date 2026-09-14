@@ -6,7 +6,7 @@ This project was built with React and TypeScript on the frontend, a Node.js and 
 
 ## demo screenshot
 
-![Job Application Tracker](./docs/UI_example_screenshot.png)
+![Job Application Tracker](./docs/UI-demo-screenshot.png)
 
 ## Features
 
