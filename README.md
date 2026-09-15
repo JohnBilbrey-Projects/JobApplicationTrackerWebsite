@@ -20,6 +20,7 @@ This project was built with React and TypeScript on the frontend, a Node.js and 
 - **Add/Edit Modal**: Create and modify applications through a reusable form displayed in a modal interface.
 - **Input Validation**: Validate application data on both the frontend and backend before storing it in the database.
 - **REST API**: Perform persistent CRUD operations through an Express API connected to PostgreSQL using Prisma ORM.
+- **Automatic Status Updates**: Automatically changes applications with status "Applied" to "No Response" after configurable number of days
 
 ## Tech Stack
 
