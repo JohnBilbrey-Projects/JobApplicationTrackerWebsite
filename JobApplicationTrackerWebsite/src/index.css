@@ -359,3 +359,21 @@ SEARCH, FILTER, SORT
 .table-toolbar select {
   min-width: 160px;;
 }
+
+
+/*
+
+Job URLs
+
+*/
+
+.job-link {
+  color: #2563eb;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.job-link:hover {
+  text-decoration: underline
+}

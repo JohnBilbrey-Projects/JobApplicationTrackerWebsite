@@ -42,7 +42,20 @@ function ApplicationTable({
                 {application.status}
               </span>
             </td>
-            <td>{application.jobUrl}</td>
+            <td>
+              {application.jobUrl ? (
+                <a
+                  href={application.jobUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="job-link"
+                >
+                  View Job
+                </a>
+              ) : (
+                "N/A"
+              )}
+            </td>
             <td>{application.location}</td>
             {/*show "N/A" for applications w no date applied */}
             <td>{application.dateApplied || "N/A"}</td>
