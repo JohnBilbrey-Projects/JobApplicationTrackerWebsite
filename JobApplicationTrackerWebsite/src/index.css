@@ -166,6 +166,7 @@ APPLICATIONS TABLE
 .application-table button:first-of-type {
   background: #e0e7ff;
   color: #3730a3;
+  margin-bottom: 3px;
 }
 
 .application-table button:last-of-type {
@@ -180,6 +181,7 @@ APPLICATIONS TABLE
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
 
 /*
 
