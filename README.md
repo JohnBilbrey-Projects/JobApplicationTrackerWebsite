@@ -219,6 +219,8 @@ Open the URL in your browser to use the application.
 
 this section may be updated further as I think of new features to add.
 
+- Automatic conversion of status "Applied" to "No Response" after specified time has passed
+- Add "Application Viewed" status
 - Additional dashboard analytics and visualizations
 - follow up reminders
 - more advanced filtering and sorting options
