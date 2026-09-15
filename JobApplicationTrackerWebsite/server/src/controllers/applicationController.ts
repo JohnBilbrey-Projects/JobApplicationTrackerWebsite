@@ -2,10 +2,33 @@ import type { Request, Response } from "express";
 import prisma from "../prisma";
 import { validateApplication } from "../validation/applicationValidation";
 
+const NO_RESPONSE_THRESHOLD_DAYS = 14;
 
 //return all stored job applications
+//automatically updates applications w status "Applied" to "No Response" after 14 days
 export async function getApplications(req: Request, res: Response) {
     try {
+        const cutoffDate = new Date();
+
+        cutoffDate.setDate(
+            cutoffDate.getDate() - NO_RESPONSE_THRESHOLD_DAYS
+        );
+
+        const cutoffDateString = cutoffDate.toISOString().split("T")[0];
+
+        await prisma.jobApplication.updateMany({
+            where: {
+                status: "Applied",
+                dateApplied: {
+                    lte: cutoffDateString,
+                },
+            },
+            data: {
+                status: "No Response",
+            },
+        });
+
+
         const applications = await prisma.jobApplication.findMany();
 
         res.json(applications);
